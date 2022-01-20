@@ -1,5 +1,4 @@
 import firebaseConfig from './config/firebase';
-import firebase from '@react-native-firebase/app';
 import { initializeApp } from 'firebase/app';
 
 import { StatusBar } from 'expo-status-bar';

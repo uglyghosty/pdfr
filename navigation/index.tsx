@@ -14,9 +14,9 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
+import Folders from '../screens/Folders';
 import TabTwoScreen from '../screens/TabTwoScreen';
-import ReportScreen from '../screens/ReportScreen';
+import Files from '../screens/Files';
 
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -54,14 +54,14 @@ function RootNavigator() {
 function TabOneStackNavigator() {
   return (
     <TabOneStack.Navigator
-      initialRouteName="TabOneScreen"
+      initialRouteName="Folders"
       defaultScreenOptions={{
         headerShown: false,
       }}
     >
       
-      <Stack.Screen name="TabOneScreen" component={TabOneScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="ReportScreen" component={ReportScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Folders" component={Folders} options={{ headerShown: false }} />
+      <Stack.Screen name="Files" component={Files} options={{ headerShown: false }} />
     </TabOneStack.Navigator>
   )
 }
