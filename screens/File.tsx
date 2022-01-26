@@ -8,53 +8,55 @@ import { useNavigation, } from '@react-navigation/native';
 // import firebase from '@react-native-firebase/app';
 // import fs from '@react-native-firebase/firestore';
 import ListItem from '../components/ListItem';
-import { getFirestore, setDoc, doc, getDoc, getDocs, collection, query, where, } from 'firebase/firestore';
+import { getFirestore, setDoc, doc, getDoc, getDocs, collection, query, where, documentId} from 'firebase/firestore';
 
-export default function Files({ navigation, route }: RootTabScreenProps<'TabOne'>) {
+export default function File({ navigation, route }: RootTabScreenProps<'TabOne'>) {
   const [screenTitle, setScreenTitle] = useState(route?.params ? route?.params?.title : "");
   const [loading, setLoading] = useState(false);
-  const [files, setFiles] = useState([]);
-  const [qHistory, setQHistory] = useState(route?.params? route?.params?.qHistory + '/' + route?.params?.title : 'categories');
+  const [fileData, setFileData] = useState([]);
+  const [qHistory, setQHistory] = useState(route?.params? route?.params?.qHistory : 'categories');
 
+  
   // firestore reference
   const db = getFirestore();
-  
-  async function getFiles() {
-    let f = [];
 
-    const q = query(collection(db, qHistory + `/reports`));
+  async function getFileData() {
+    // let f = [];
+    console.log("his",qHistory);
+    console.log("title",route?.params?.title);
+    const q = query(doc(db, qHistory, ''));
 
-    await getDocs(q).then((collection) => {
-      collection.forEach((doc) => {
-        if(doc?.exists()) {
-          f.push(doc);
-        }
-      })
+    await getDoc(q).then((data) => {
+      if(data.exists()) {
+        console.log(data.data())
+
+        setFileData(data.data());
+      } else {
+        console.log('doc does not exist')
+      }
     });
-
-    setFiles(f);
   }
   
   useEffect(() => {
-    getFiles();
+    getFileData();
   },[route]);
+
 
   return (
     <View style={styles.container}>
       <List.Section style={{width:'100%'}}>
         <List.Subheader style={styles.title}>{`${screenTitle}`}</List.Subheader>
-        {
-          files.map((l,i) => {
-            const data = l?.data();
+        {/* {
+          fileData?.map((l,i) => {
             return (
               <ListItem 
                 key={i}
-                title={data?.title}
-                onPress={() => navigation.navigate('File', {qHistory: qHistory + '/reports/' + data?.title, title: data?.title})}
+                title={l.title}
+                // onPress={() => navigation.navigate('File', {title:l.title})}
               />
             );
           })
-        }
+        } */}
       </List.Section>
     </View>
   );

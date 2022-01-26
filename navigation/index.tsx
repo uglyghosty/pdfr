@@ -17,6 +17,7 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import Folders from '../screens/Folders';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import Files from '../screens/Files';
+import File from '../screens/File';
 
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -59,9 +60,9 @@ function TabOneStackNavigator() {
         headerShown: false,
       }}
     >
-      
       <Stack.Screen name="Folders" component={Folders} options={{ headerShown: false }} />
       <Stack.Screen name="Files" component={Files} options={{ headerShown: false }} />
+      <Stack.Screen name="File" component={File} options={{ headerShown: false }} />
     </TabOneStack.Navigator>
   )
 }

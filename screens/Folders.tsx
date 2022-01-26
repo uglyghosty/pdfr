@@ -11,30 +11,17 @@ import ListItem from '../components/ListItem';
 import { getFirestore, setDoc, doc, getDoc, getDocs, collection, query, where, } from 'firebase/firestore';
 
 export default function Files({ navigation, route }: RootTabScreenProps<'TabOne'>) {
-  const stackNavigation = useNavigation();
- 
   const [reporter, setReporter] = useState("");
   const [screenTitle, setScreenTitle] = useState("");
   const [loading, isLoading] = useState(true);
   const [folders, setFolders] = useState([]);
   const [files, setFiles] = useState([]);
+  const [qHistory, setQHistory] = useState('/');
 
-  // const [data, setData] = useState([
-  //   {title:'Daily'},
-  //   {title:'Incidents'},
-  // ]);
+  // firebase reference
   const db = getFirestore();
 
-  // const docRef = doc(db, "users", "FpyftA1lqDpXyv91Db9q");
   async function getFolders() {
-    // const docSnap = await getDoc(docRef);
-
-    // if (docSnap.exists()) {
-    //   console.log("Document data:", docSnap.data());
-    // } else {
-    //   // doc.data() will be undefined in this case
-    //   console.log("No such document!");
-    // }
     let foldersArr = [];
 
     const q = query(collection(db, "categories"));
@@ -42,35 +29,11 @@ export default function Files({ navigation, route }: RootTabScreenProps<'TabOne'
     await getDocs(q).then((collection) => {
         collection?.forEach((doc) => {
           if(doc?.data()) {
-            foldersArr.push(doc.data());
+            foldersArr.push(doc);
           }
       });
   
       setFolders(foldersArr);
-    });
-  }
-
-  async function getFiles(title) {
-    console.log(title)
-    // const docSnap = await getDoc(docRef);
-
-    // if (docSnap.exists()) {
-    //   console.log("Document data:", docSnap.data());
-    // } else {
-    //   // doc.data() will be undefined in this case
-    //   console.log("No such document!");
-    // }
-    let filesArr = [];
-
-    const q = query(collection(db, `categories/${title}`/reports));
-
-    await getDocs(q).then((files) => {
-        files?.forEach((doc) => {
-          console.log(doc.data());
-        filesArr.push(doc?.data());
-      });
-  
-      setFolders(filesArr);
     });
   }
   
@@ -84,11 +47,13 @@ export default function Files({ navigation, route }: RootTabScreenProps<'TabOne'
         <List.Subheader style={styles.title}>Categories</List.Subheader>
         {
           folders.map((l,i) => {
+            const data = l?.data();
+            const path = l?.id;
             return (
               <ListItem 
                 key={i}
-                title={l?.title}
-                onPress={() => l?.title ? navigation.navigate('Files',{title: l?.title}) : {}}
+                title={data?.title}
+                onPress={() => data?.title ? navigation.navigate('Files', {qHistory: qHistory + 'categories', title: data?.title}) : {}}
               />
             );
           })
