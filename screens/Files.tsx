@@ -41,18 +41,18 @@ export default function Files({ navigation }: RootTabScreenProps<'TabOne'>) {
     querySnapshot.forEach((doc) => {
       f.push(doc.data());
     });
-    
+
     getFiles(f);
   }
   
-  getCategorties();
+  getFiles();
 
   return (
     <View style={styles.container}>
       <List.Section style={{width:'100%'}}>
         <List.Subheader style={styles.title}>Categories</List.Subheader>
         {
-          categories.map((l,i) => {
+          files.map((l,i) => {
             return (
               <ListItem 
                 key={i}

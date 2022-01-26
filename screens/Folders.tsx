@@ -10,13 +10,14 @@ import { useNavigation, } from '@react-navigation/native';
 import ListItem from '../components/ListItem';
 import { getFirestore, setDoc, doc, getDoc, getDocs, collection, query, where, } from 'firebase/firestore';
 
-export default function Files({ navigation }: RootTabScreenProps<'TabOne'>) {
+export default function Files({ navigation, route }: RootTabScreenProps<'TabOne'>) {
   const stackNavigation = useNavigation();
  
   const [reporter, setReporter] = useState("");
   const [screenTitle, setScreenTitle] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [loading, isLoading] = useState(true);
+  const [folders, setFolders] = useState([]);
+  const [files, setFiles] = useState([]);
 
   // const [data, setData] = useState([
   //   {title:'Daily'},
@@ -25,7 +26,7 @@ export default function Files({ navigation }: RootTabScreenProps<'TabOne'>) {
   const db = getFirestore();
 
   // const docRef = doc(db, "users", "FpyftA1lqDpXyv91Db9q");
-  async function getCategorties() {
+  async function getFolders() {
     // const docSnap = await getDoc(docRef);
 
     // if (docSnap.exists()) {
@@ -34,31 +35,60 @@ export default function Files({ navigation }: RootTabScreenProps<'TabOne'>) {
     //   // doc.data() will be undefined in this case
     //   console.log("No such document!");
     // }
-    let cats = [];
+    let foldersArr = [];
 
     const q = query(collection(db, "categories"));
-
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      cats.push(doc.data());
+    
+    await getDocs(q).then((collection) => {
+        collection?.forEach((doc) => {
+          if(doc?.data()) {
+            foldersArr.push(doc.data());
+          }
+      });
+  
+      setFolders(foldersArr);
     });
+  }
 
-    setCategories(cats);
+  async function getFiles(title) {
+    console.log(title)
+    // const docSnap = await getDoc(docRef);
+
+    // if (docSnap.exists()) {
+    //   console.log("Document data:", docSnap.data());
+    // } else {
+    //   // doc.data() will be undefined in this case
+    //   console.log("No such document!");
+    // }
+    let filesArr = [];
+
+    const q = query(collection(db, `categories/${title}`/reports));
+
+    await getDocs(q).then((files) => {
+        files?.forEach((doc) => {
+          console.log(doc.data());
+        filesArr.push(doc?.data());
+      });
+  
+      setFolders(filesArr);
+    });
   }
   
-  getCategorties();
+  useEffect(() => {
+    getFolders();
+  },[route]);
 
   return (
     <View style={styles.container}>
       <List.Section style={{width:'100%'}}>
         <List.Subheader style={styles.title}>Categories</List.Subheader>
         {
-          categories.map((l,i) => {
+          folders.map((l,i) => {
             return (
               <ListItem 
                 key={i}
-                title={l.title}
-                onPress={() => stackNavigation.navigate('Files', {title:l.title})}
+                title={l?.title}
+                onPress={() => l?.title ? navigation.navigate('Files',{title: l?.title}) : {}}
               />
             );
           })
