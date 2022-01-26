@@ -21,15 +21,11 @@ export default function File({ navigation, route }: RootTabScreenProps<'TabOne'>
   const db = getFirestore();
 
   async function getFileData() {
-    // let f = [];
-    console.log("his",qHistory);
-    console.log("title",route?.params?.title);
     const q = query(doc(db, qHistory, ''));
 
     await getDoc(q).then((data) => {
       if(data.exists()) {
         console.log(data.data())
-
         setFileData(data.data());
       } else {
         console.log('doc does not exist')
