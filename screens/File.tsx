@@ -8,6 +8,7 @@ import { useNavigation, } from '@react-navigation/native';
 // import firebase from '@react-native-firebase/app';
 // import fs from '@react-native-firebase/firestore';
 import ListItem from '../components/ListItem';
+import UserTextInput from '../components/UserTextInput';
 import { getFirestore, setDoc, doc, getDoc, getDocs, collection, query, where, documentId} from 'firebase/firestore';
 
 export default function File({ navigation, route }: RootTabScreenProps<'TabOne'>) {
@@ -19,40 +20,55 @@ export default function File({ navigation, route }: RootTabScreenProps<'TabOne'>
   
   // firestore reference
   const db = getFirestore();
+  
+  let componentsArr = [];
 
   async function getFileData() {
     const q = query(doc(db, qHistory, ''));
 
     await getDoc(q).then((data) => {
       if(data.exists()) {
-        console.log(data.data())
         setFileData(data.data());
+
       } else {
         console.log('doc does not exist')
       }
-    });
+    })
   }
+  
+  console.log(fileData)
+  
+  
+  // let componentsArr = [];
+  
+  // const renderInputs = () => {
+  //   Object.values(fileData).forEach(i => {
+  //     // console.log(i?.inputType)
+  //     if (i) {
+  //       return componentsArr.push(<View style={{backgroundColor:'red', height:100, width:'100%'}}></View>);
+  //     }
+  //   });
+  // }
   
   useEffect(() => {
     getFileData();
-  },[route]);
-
+  },[route, ]);
 
   return (
     <View style={styles.container}>
       <List.Section style={{width:'100%'}}>
         <List.Subheader style={styles.title}>{`${screenTitle}`}</List.Subheader>
-        {/* {
-          fileData?.map((l,i) => {
-            return (
-              <ListItem 
-                key={i}
-                title={l.title}
-                // onPress={() => navigation.navigate('File', {title:l.title})}
-              />
-            );
+        {
+          Object.entries(fileData).map(([key, values]) => {
+            if (values?.inputType === 'textInput') {
+              return(<UserTextInput key={key} title={key} value={values?.value}/>);
+            }
+            if (values?.inputType === 'time') {
+              // TODO: create time component for user input
+              return;
+            }
           })
-        } */}
+        }
       </List.Section>
     </View>
   );
