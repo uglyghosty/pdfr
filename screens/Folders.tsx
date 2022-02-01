@@ -10,6 +10,8 @@ import { useNavigation, } from '@react-navigation/native';
 import ListItem from '../components/ListItem';
 import { getFirestore, setDoc, doc, getDoc, getDocs, collection, query, where, } from 'firebase/firestore';
 
+import FABComponent from '../components/FABComponent';
+
 export default function Files({ navigation, route }: RootTabScreenProps<'TabOne'>) {
   const [reporter, setReporter] = useState("");
   const [screenTitle, setScreenTitle] = useState("");
@@ -59,6 +61,7 @@ export default function Files({ navigation, route }: RootTabScreenProps<'TabOne'
           })
         }
       </List.Section>
+      <FABComponent/>
     </View>
   );
 }
@@ -70,6 +73,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingTop: 10,
     fontSize:40
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
   title: {
     fontSize: 20,

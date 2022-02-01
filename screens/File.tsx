@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Button, List, } from 'react-native-paper';
+import { Button, List, FAB} from 'react-native-paper';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
