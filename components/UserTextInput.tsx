@@ -12,14 +12,14 @@ const ListItem = ({title, initValue}) => {
     },[title]);
 
     return (
-        <View style={{flex:1,}}>
+        <Surface style={{flex:1, marginHorizontal:10, }}>
             <TextInput
-                style={{width:'100%'}}
+                style={{width:'100%', backgroundColor:'white',}}
                 label={title}
                 value={value}
                 onChangeText={text => setValue(text)}
             />
-        </View>
+        </Surface>
     );
 }
 

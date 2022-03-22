@@ -12,35 +12,39 @@ const ListItem = ({title, onPress, firestore}) => {
     },[title]);
 
     return (
-        <List.Accordion 
-            title={title}
-            right={() => {
-                // chevron
-                // if admin, add edit button
-                // else show nothing
-            }}
-            expanded={false} // admin control will have true value
-            style={{width:'100%',}}
-            left={props => <List.Icon {...props} icon="folder" />}
-            onPress={onPress}
+        <Surface
+        style={{ marginBottom:10, marginHorizontal:10, }}
         >
-            {
-                loading?
-                <Surface style={{flex:1,}}>
-                    <ActivityIndicator/>
-                </Surface>
-                :
-                files.length > 0?
-                <Surface style={{flex:1,}}>
-                    <List.Item title="first item" />
-                    <List.Item title="Second item" />
-                </Surface>
-                :
-                <Surface style={{flex:1,}}>
-                    <List.Item title="No reports yet"/>
-                </Surface>
-            }
-        </List.Accordion>
+            <List.Accordion 
+                right={() => {
+                    // chevron
+                    // if admin, add edit button
+                    // else show nothing
+                }}
+                expanded={false} // admin control will have true value
+                style={{width:'100%',}}
+                left={props => <List.Icon {...props} icon="folder" />}
+                onPress={onPress}
+                title={title}
+            >
+                {
+                    loading?
+                    <Surface style={{flex:1,}}>
+                        <ActivityIndicator/>
+                    </Surface>
+                    :
+                    files.length > 0?
+                    <Surface style={{flex:1,}}>
+                        <List.Item title="first item" />
+                        <List.Item title="Second item" />
+                    </Surface>
+                    :
+                    <Surface style={{flex:1,}}>
+                        <List.Item title="No reports yet"/>
+                    </Surface>
+                }
+            </List.Accordion>
+        </Surface>  
     );
 }
 

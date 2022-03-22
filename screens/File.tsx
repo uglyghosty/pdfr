@@ -9,7 +9,9 @@ import { useNavigation, } from '@react-navigation/native';
 // import fs from '@react-native-firebase/firestore';
 import ListItem from '../components/ListItem';
 import UserTextInput from '../components/UserTextInput';
+import UserTimeInput from '../components/UserTimeInput';
 import { getFirestore, setDoc, doc, getDoc, getDocs, collection, query, where, documentId} from 'firebase/firestore';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 export default function File({ navigation, route }: RootTabScreenProps<'TabOne'>) {
   const [screenTitle, setScreenTitle] = useState(route?.params ? route?.params?.title : "");
@@ -28,7 +30,9 @@ export default function File({ navigation, route }: RootTabScreenProps<'TabOne'>
 
     await getDoc(q).then((data) => {
       if(data.exists()) {
-        setFileData(data.data());
+        setFileData(Object.entries(data.data()).sort((a,b) => {
+          return a[1].priority - b[1].priority;
+        }));
 
       } else {
         console.log('doc does not exist')
@@ -36,7 +40,7 @@ export default function File({ navigation, route }: RootTabScreenProps<'TabOne'>
     })
   }
   
-  console.log(fileData)
+  console.log(fileData);
   
   
   // let componentsArr = [];
@@ -54,22 +58,35 @@ export default function File({ navigation, route }: RootTabScreenProps<'TabOne'>
     getFileData();
   },[route, ]);
 
+  const createPDF = async () => {
+    let options = {
+      html: '<h1>PDF TEST</h1>',
+      fileName: 'test',
+      directory: 'Documents',
+    };
+
+    let file = await RNHTMLtoPDF.convert(options);
+    console.log(file.filePath);
+    alert(file.filePath);
+  }
+
   return (
     <View style={styles.container}>
       <List.Section style={{width:'100%'}}>
         <List.Subheader style={styles.title}>{`${screenTitle}`}</List.Subheader>
         {
-          Object.entries(fileData).map(([key, values]) => {
+          fileData.map(([key, values]) => {
             if (values?.inputType === 'textInput') {
               return(<UserTextInput key={key} title={key} value={values?.value}/>);
             }
             if (values?.inputType === 'time') {
               // TODO: create time component for user input
-              return;
+              return(<UserTimeInput key={key} title={key} value={values?.value}/>);
             }
           })
         }
       </List.Section>
+      {<Button onPress={() => createPDF()} style={{bottom: 0, position: 'absolute',}}>SUBMIT</Button>}
     </View>
   );
 }

@@ -15,7 +15,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import Folders from '../screens/Folders';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import Profile from '../screens/Profile';
 import Files from '../screens/Files';
 import File from '../screens/File';
 
@@ -52,6 +52,7 @@ function RootNavigator() {
   );
 }
 
+// bottom tab nav, tab one stack 
 function TabOneStackNavigator() {
   return (
     <TabOneStack.Navigator
@@ -64,6 +65,21 @@ function TabOneStackNavigator() {
       <Stack.Screen name="Files" component={Files} options={{ headerShown: false }} />
       <Stack.Screen name="File" component={File} options={{ headerShown: false }} />
     </TabOneStack.Navigator>
+  )
+}
+
+// bottom tab nav, tab two stack 
+function TabTwoStackNavigator() {
+  return (
+    <TabTwoStack.Navigator
+      initialRouteName="Profile"
+      defaultScreenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+      <Stack.Screen name="File" component={File} options={{ headerShown: false }} />
+    </TabTwoStack.Navigator>
   )
 }
 
@@ -108,7 +124,7 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="TabTwo"
-        component={TabTwoScreen}
+        component={TabTwoStackNavigator}
         options={{
           title: 'Profile',
           tabBarIcon: ({ color }) => <TabBarIcon name="user-o" color={color} />,
