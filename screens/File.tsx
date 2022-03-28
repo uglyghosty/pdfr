@@ -70,10 +70,14 @@ export default function File({ navigation, route }: RootTabScreenProps<'TabOne'>
     alert(file.filePath);
   }
 
+  const captializeWords = string => {
+    return string.replace(/\b\w/g, c => c.toUpperCase());
+  }
+
   return (
     <View style={styles.container}>
       <List.Section style={{width:'100%'}}>
-        <List.Subheader style={styles.title}>{`${screenTitle}`}</List.Subheader>
+        <List.Subheader style={styles.title}>{`${captializeWords(screenTitle)}`}</List.Subheader>
         {
           fileData.map(([key, values]) => {
             if (values?.inputType === 'textInput') {
